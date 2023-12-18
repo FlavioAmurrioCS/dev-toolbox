@@ -1,0 +1,85 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dev-toolbox"
+dynamic = ["version"]
+description = ''
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "Flavio Amurrio", email = "25621374+FlavioAmurrioCS@users.noreply.github.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+]
+
+[project.urls]
+Documentation = "https://github.com/FlavioAmurrioCS/dev-toolbox#readme"
+Issues = "https://github.com/FlavioAmurrioCS/dev-toolbox/issues"
+Source = "https://github.com/FlavioAmurrioCS/dev-toolbox"
+
+[project.scripts]
+dev-toolbox = "dev_toolbox.cli:dev_toolbox"
+
+[tool.hatch.version]
+path = "src/dev_toolbox/__about__.py"
+
+[tool.hatch.envs.default]
+dependencies = [
+  "coverage[toml]>=6.5",
+  "pytest",
+]
+[tool.hatch.envs.default.scripts]
+test = "pytest {args:tests}"
+test-cov = "coverage run -m pytest {args:tests}"
+cov-report = [
+  "- coverage combine",
+  "coverage report",
+]
+cov = [
+  "test-cov",
+  "cov-report",
+]
+
+[[tool.hatch.envs.all.matrix]]
+python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+[tool.hatch.envs.types]
+dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/dev_toolbox tests}"
+
+[tool.coverage.run]
+source_pkgs = ["dev_toolbox", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/dev_toolbox/__about__.py",
+]
+
+[tool.coverage.paths]
+dev_toolbox = ["src/dev_toolbox", "*/dev-toolbox/src/dev_toolbox"]
+tests = ["tests", "*/dev-toolbox/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
