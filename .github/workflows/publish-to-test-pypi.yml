@@ -18,9 +18,12 @@ jobs:
         python3 -m
         pip install
         build
+        shiv
         --user
     - name: Build a binary wheel and a source tarball
       run: python3 -m build
+    - name: Build a zipapp
+      run: shiv -o dist/dev-toolbox.pyz -c dev-toolbox .
     - name: Store the distribution packages
       uses: actions/upload-artifact@v3
       with:
@@ -73,6 +76,7 @@ jobs:
         inputs: >-
           ./dist/*.tar.gz
           ./dist/*.whl
+          ./dist/*.pyz
     - name: Create GitHub Release
       env:
         GITHUB_TOKEN: ${{ github.token }}
