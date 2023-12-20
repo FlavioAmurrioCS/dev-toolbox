@@ -2,13 +2,15 @@
 
 [![PyPI - Version](https://img.shields.io/pypi/v/dev-toolbox.svg)](https://pypi.org/project/dev-toolbox)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/dev-toolbox.svg)](https://pypi.org/project/dev-toolbox)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/FlavioAmurrioCS/dev-toolbox/main.svg)](https://results.pre-commit.ci/latest/github/FlavioAmurrioCS/dev-toolbox/main)
 
 -----
 
 **Table of Contents**
 
-- [Installation](#installation)
-- [License](#license)
+- [dev-toolbox](#dev-toolbox)
+  - [Installation](#installation)
+  - [License](#license)
 
 ## Installation
 
