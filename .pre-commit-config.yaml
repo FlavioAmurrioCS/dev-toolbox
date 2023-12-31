@@ -1,3 +1,5 @@
+ci:
+  skip: [pyright, hatch-test]
 repos:
   - repo: https://github.com/asottile/reorder-python-imports
     rev: v3.12.0
@@ -38,10 +40,3 @@ repos:
         language: python
         additional_dependencies: [hatch]
         pass_filenames: false
-  #     - id: tox
-  #       name: tox
-  #       entry: tox run-parallel
-  #       language: system
-  #       pass_filenames: false
-  #       always_run: true
-  #       types: [python]
