@@ -1,6 +1,10 @@
 ci:
-  skip: [pyright, hatch-test]
+  skip: [hatch-test, taplo, tox]
 repos:
+  - repo: https://github.com/ComPWA/mirrors-taplo
+    rev: "v0.8.1"
+    hooks:
+      - id: taplo
   - repo: https://github.com/asottile/reorder-python-imports
     rev: v3.12.0
     hooks:
@@ -28,15 +32,20 @@ repos:
     hooks:
       - id: mypy
         additional_dependencies: [types-all]
-  - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.344
-    hooks:
-      - id: pyright
   - repo: local
     hooks:
+      - id: tox
+        name: tox
+        entry: tox run-parallel
+        language: python
+        additional_dependencies: ["tox"]
+        pass_filenames: false
+        always_run: true
+        types: [python]
       - id: hatch-test
         name: hatch-test
-        entry: hatch run test
+        entry: hatch run --parallel all:test
         language: python
         additional_dependencies: [hatch]
         pass_filenames: false
+        always_run: true

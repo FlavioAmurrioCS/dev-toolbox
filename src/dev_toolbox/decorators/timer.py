@@ -14,7 +14,8 @@ _R = TypeVar("_R")
 
 
 class _Timer(Generic[_P, _R]):
-    """A decorator class that measures the execution time of a function.
+    """
+    A decorator class that measures the execution time of a function.
 
     Args:
     ----
@@ -44,9 +45,10 @@ class _Timer(Generic[_P, _R]):
         functools.update_wrapper(self, func)
 
     def stats(self) -> _Timer._TimerStats:
-        """Calculate and return statistics about the timer.
+        """
+        Calculate and return statistics about the timer.
 
-        Returns:
+        Returns
         -------
             _TimerStats: An object containing various statistics about the timer, including the
             function name, average time, median time, minimum time, maximum time, and total time.
@@ -67,3 +69,10 @@ class _Timer(Generic[_P, _R]):
         duration = time.perf_counter_ns() - start
         self.__times__.append(duration)
         return ret
+
+
+def timer() -> Callable[[Callable[_P, _R]], _Timer[_P, _R]]:
+    def _inner_timer(func: Callable[_P, _R]) -> _Timer[_P, _R]:
+        return _Timer(func)
+
+    return _inner_timer
