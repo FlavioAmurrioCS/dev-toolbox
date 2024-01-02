@@ -240,7 +240,7 @@ class MultiFileOpenerSequence(MultiFileOpener[_LiteralStringT, _IOT]):
         results = glob.glob(
             os.path.join(
                 self.__base_dir__,
-                f"{filename or self.__filenames__[0]}_????{self.__extension__}",
+                f"{filename or self.__filenames__[0]}_?????{self.__extension__}",
             )
         )
         return sorted(results)
