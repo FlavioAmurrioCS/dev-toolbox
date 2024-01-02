@@ -1,14 +1,16 @@
 from __future__ import annotations
 
+import glob
 import os
 from contextlib import ExitStack
 from typing import Callable
 from typing import Generic
 from typing import IO
-from typing import LiteralString
 from typing import Sequence
 from typing import TYPE_CHECKING
 from typing import TypeVar
+
+from typing_extensions import LiteralString
 
 if TYPE_CHECKING:
     from types import TracebackType
@@ -67,6 +69,7 @@ class MultiFileOpener(Generic[_LiteralStringT, _IOT]):
 
     def __init__(
         self,
+        *,
         filenames: Sequence[_LiteralStringT],
         base_dir: str = "",
         extension: str = "",
@@ -188,8 +191,9 @@ class MultiFileOpenerSequence(MultiFileOpener[_LiteralStringT, _IOT]):
 
     def __init__(  # noqa: PLR0913
         self,
+        *,
         filenames: Sequence[_LiteralStringT],
-        start: int = 0,
+        start: int | None = None,
         base_dir: str = "",
         extension: str = "",
         opener: Callable[[str], _IOT] = lambda x: open(x, "w"),  # type: ignore[assignment,return-value]  # noqa: SIM115
@@ -209,7 +213,10 @@ class MultiFileOpenerSequence(MultiFileOpener[_LiteralStringT, _IOT]):
         -------
             None
         """  # noqa: E501
-        super().__init__(filenames, base_dir, extension, opener)
+        super().__init__(filenames=filenames, base_dir=base_dir, extension=extension, opener=opener)
+        if start is None:
+            last_file = self.last_file(filenames[0])
+            start = int(last_file.split("_")[-1].split(".")[0]) + 1 if last_file else 0
         self.__counter__ = start
 
     def _file_path(self, filename: _LiteralStringT) -> str:
@@ -227,6 +234,14 @@ class MultiFileOpenerSequence(MultiFileOpener[_LiteralStringT, _IOT]):
         return os.path.join(
             self.__base_dir__, f"{filename}_{self.__counter__:05}{self.__extension__}"
         )
+
+    def last_file(self, filename: _LiteralStringT | None = None) -> str | None:
+        results = glob.glob(
+            os.path.join(
+                self.__base_dir__, f"{filename or self.__filenames__[0]}_*{self.__extension__}"
+            )
+        )
+        return max(results) if results else None
 
     def next_file(self) -> int:
         """

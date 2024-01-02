@@ -86,7 +86,11 @@ exclude_lines = [
 ]
 
 # COMMON SETTINGS BELOW
+[tool.pyright]
+pythonVersion = "3.8"
+
 [tool.mypy]
+python_version = "3.8"
 check_untyped_defs = true
 disallow_any_generics = true
 disallow_incomplete_defs = true
