@@ -216,7 +216,7 @@ class MultiFileOpenerSequence(MultiFileOpener[_LiteralStringT, _IOT]):
         super().__init__(filenames=filenames, base_dir=base_dir, extension=extension, opener=opener)
         if start is None:
             last_file = self.last_file(filenames[0])
-            start = int(last_file.split("_")[-1].split(".")[0]) + 1 if last_file else 0
+            start = int(last_file[-1].split("_")[-1].split(".")[0]) + 1 if last_file else 0
         self.__counter__ = start
 
     def _file_path(self, filename: _LiteralStringT) -> str:
@@ -235,13 +235,15 @@ class MultiFileOpenerSequence(MultiFileOpener[_LiteralStringT, _IOT]):
             self.__base_dir__, f"{filename}_{self.__counter__:05}{self.__extension__}"
         )
 
-    def last_file(self, filename: _LiteralStringT | None = None) -> str | None:
+    def last_file(self, filename: _LiteralStringT | None = None) -> list[str]:
+        # Number of questions marks should match the number of digits in the counter representation
         results = glob.glob(
             os.path.join(
-                self.__base_dir__, f"{filename or self.__filenames__[0]}_*{self.__extension__}"
+                self.__base_dir__,
+                f"{filename or self.__filenames__[0]}_????{self.__extension__}",
             )
         )
-        return max(results) if results else None
+        return sorted(results)
 
     def next_file(self) -> int:
         """
