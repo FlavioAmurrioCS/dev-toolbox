@@ -10,5 +10,5 @@ except (ImportError, LookupError):
             __version__,  #
         )
     except ModuleNotFoundError:
-        msg = "dev-toolbox is not correctly installed. " "Please install it with pip."
+        msg = "dev-toolbox is not correctly installed. Please install it with pip."
         raise RuntimeError(msg)  # noqa: B904, TRY200
