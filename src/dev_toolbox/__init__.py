@@ -6,7 +6,7 @@ try:
     __version__ = get_version(root="..", relative_to=__file__)
 except (ImportError, LookupError):
     try:
-        from dev_toolbox._version import (  # type: ignore # noqa: F401
+        from dev_toolbox._version import (  # noqa: F401
             __version__,  #
         )
     except ModuleNotFoundError:
