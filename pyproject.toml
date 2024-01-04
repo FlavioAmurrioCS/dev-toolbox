@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
@@ -37,12 +37,17 @@ Source = "https://github.com/FlavioAmurrioCS/dev-toolbox"
 dev-toolbox = "dev_toolbox.cli:dev_toolbox"
 
 [tool.hatch.version]
-path = "src/dev_toolbox/__about__.py"
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/dev_toolbox/_version.py"
+
 
 [tool.hatch.envs.default]
 dependencies = [
   "coverage[toml]>=6.5",
   "pytest",
+  "setuptools-scm",
 ]
 [tool.hatch.envs.default.scripts]
 test = "pytest {args:tests}"
