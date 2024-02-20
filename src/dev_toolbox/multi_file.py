@@ -58,6 +58,7 @@ class MultiFileOpener(Generic[_LiteralStringT, _IOT]):
         file2 = opener["file2"]
         # Use the opened files
     ```
+
     """  # noqa: E501
 
     __filenames__: tuple[_LiteralStringT, ...]
@@ -88,6 +89,7 @@ class MultiFileOpener(Generic[_LiteralStringT, _IOT]):
         Returns:
         -------
             None
+
         """  # noqa: E501
         self.__filenames__ = tuple(filenames)
         self.__extension__ = "." + extension.lstrip(".")
@@ -119,6 +121,7 @@ class MultiFileOpener(Generic[_LiteralStringT, _IOT]):
         Returns
         -------
             Self: The current instance of the context manager.
+
         """  # noqa: E501
         self.__stack__ = ExitStack().__enter__()
         try:
@@ -148,6 +151,7 @@ class MultiFileOpener(Generic[_LiteralStringT, _IOT]):
         Returns:
         -------
             Optional[bool]: True if the exception was handled, False otherwise.
+
         """
         return self.__stack__.__exit__(tp, inst, tb)
 
@@ -187,6 +191,7 @@ class MultiFileOpenerSequence(MultiFileOpener[_LiteralStringT, _IOT]):
     -------
         _file_path(filename: _LiteralStringT) -> str: Returns the file path for a given filename.
         next_file() -> int: Closes the current file, increments the counter, opens the next file, and returns the new counter value.
+
     """  # noqa: E501
 
     def __init__(  # noqa: PLR0913
@@ -212,6 +217,7 @@ class MultiFileOpenerSequence(MultiFileOpener[_LiteralStringT, _IOT]):
         Returns:
         -------
             None
+
         """  # noqa: E501
         super().__init__(filenames=filenames, base_dir=base_dir, extension=extension, opener=opener)
         if start is None:
@@ -230,6 +236,7 @@ class MultiFileOpenerSequence(MultiFileOpener[_LiteralStringT, _IOT]):
         Returns:
         -------
             str: The file path.
+
         """
         return os.path.join(
             self.__base_dir__, f"{filename}_{self.__counter__:05}{self.__extension__}"
@@ -246,6 +253,7 @@ class MultiFileOpenerSequence(MultiFileOpener[_LiteralStringT, _IOT]):
         Returns:
         -------
             list[str]: A sorted list of file paths matching the filename pattern.
+
         """  # noqa: E501
         results = glob.glob(
             os.path.join(
@@ -262,6 +270,7 @@ class MultiFileOpenerSequence(MultiFileOpener[_LiteralStringT, _IOT]):
         Returns
         -------
             int: The new counter value.
+
         """  # noqa: E501
         self.__stack__.close()
         self.__counter__ += 1

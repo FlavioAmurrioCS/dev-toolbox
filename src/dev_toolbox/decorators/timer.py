@@ -35,8 +35,8 @@ class _Timer(Generic[_P, _R]):
         funcname: str
         average: float
         median: float
-        min: float  # noqa: A003
-        max: float  # noqa: A003
+        min: float
+        max: float
         total: float
 
     def __init__(self, func: Callable[_P, _R]) -> None:
@@ -52,6 +52,7 @@ class _Timer(Generic[_P, _R]):
         -------
             _TimerStats: An object containing various statistics about the timer, including the
             function name, average time, median time, minimum time, maximum time, and total time.
+
         """
         sorted_data = sorted(self.__times__)
         return _Timer._TimerStats(
