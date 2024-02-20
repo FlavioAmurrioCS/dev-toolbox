@@ -35,6 +35,8 @@ Source = "https://github.com/FlavioAmurrioCS/dev-toolbox"
 
 [project.scripts]
 dev-toolbox = "dev_toolbox.cli:dev_toolbox"
+dev-hierarchy = "dev_toolbox.reflection_tools.class_hierarchy:main"
+dev-tree = "dev_toolbox.cli.tree:main"
 
 [tool.hatch.version]
 source = "vcs"
@@ -91,6 +93,9 @@ exclude_lines = [
 ]
 
 # COMMON SETTINGS BELOW
+[tool.hatch.envs.hatch-static-analysis]
+config-path = "none"
+
 [tool.pyright]
 pythonVersion = "3.8"
 
@@ -104,15 +109,14 @@ no_implicit_optional = true
 warn_redundant_casts = true
 warn_unused_ignores = true
 
-[tool.hatch.envs.hatch-static-analysis]
-config-path = "none"
 
 [tool.ruff]
 line-length = 100
+
+[tool.ruff.lint]
 select = [
   "ALL",
 ]
-
 ignore = [
   "ANN101", # missing-type-self
   "ANN102", # missing-type-cls
@@ -140,7 +144,7 @@ docstring-code-format = true
 docstring-code-line-length = 100
 
 # https://github.com/astral-sh/ruff/issues/4368
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "tests/**/*.py" = [
   "S101",   # assert
   "E501",   # line-too-long
