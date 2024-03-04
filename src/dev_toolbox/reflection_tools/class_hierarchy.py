@@ -10,7 +10,7 @@ from typing import Iterable
 from typing import Sequence
 from typing import TYPE_CHECKING
 
-from dev_toolbox.data_structures.tree import Node
+from dev_toolbox.data_structures.tree import TreeNode
 
 
 if TYPE_CHECKING:
@@ -72,8 +72,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     else:
         relations = get_relations(args.files_or_modules)
 
-    tree_top_nodes = Node.build_tree(list(relations))
-    Node(name="args.root", children=tree_top_nodes).print_tree()
+    tree_top_nodes = TreeNode.build_tree(list(relations))
+    TreeNode(data="args.root", children=tree_top_nodes).print_tree()
     return 0
 
 
