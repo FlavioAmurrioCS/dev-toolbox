@@ -2,13 +2,33 @@ from __future__ import annotations
 
 from typing import Dict
 from typing import List
+from typing import NamedTuple
+from typing import Sequence
 from typing import TYPE_CHECKING
+from typing import TypeVar
 from typing import Union
 
-
 if TYPE_CHECKING:
+    from typing_extensions import TypeGuard
     from typing_extensions import TypeAlias
+
+    _T = TypeVar("_T")
 
     JSON_TYPE: TypeAlias = Union[
         str, int, float, bool, None, List["JSON_TYPE"], Dict[str, "JSON_TYPE"]
     ]
+
+
+def is_list_of(lst: Sequence[object], tp: type[_T]) -> TypeGuard[list[_T]]:
+    return isinstance(lst, list) and all(isinstance(x, tp) for x in lst)
+
+
+def is_namedtuple(obj: object) -> TypeGuard[NamedTuple]:
+    t = type(obj)
+    b = t.__bases__
+    if len(b) != 1 or b[0] != tuple:
+        return False
+    f = getattr(t, "_fields", None)
+    if not isinstance(f, tuple):
+        return False
+    return all(isinstance(n, str) for n in f)
