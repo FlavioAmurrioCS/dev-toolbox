@@ -2,11 +2,15 @@ from __future__ import annotations
 
 from inspect import isawaitable
 from typing import cast
+from typing import Dict
+from typing import List
+from typing import NamedTuple
 from typing import overload
 from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
+    from http.client import HTTPResponse
     from typing import Any
     from typing import Awaitable
     from typing import Mapping
@@ -26,6 +30,7 @@ if TYPE_CHECKING:
         FileContent,
         Tuple[Optional[str], FileContent],
     ]
+    _Params = Union[Dict[str, Any], Tuple[Tuple[str, Any], ...], List[Tuple[str, Any]], None]
 
     class _OptionalRequestsArgs(TypedDict, total=False):
         auth: tuple[str, str] | None
@@ -34,7 +39,7 @@ if TYPE_CHECKING:
         files: Mapping[str, _FileSpec]
         headers: Mapping[str, Any] | None
         json: Any | None
-        params: dict[str, Any] | tuple[tuple[str, Any], ...] | list[tuple[str, Any]] | None
+        params: _Params
         timeout: float | None
 
     HTTP_METHOD = Literal["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS", "TRACE"]
@@ -91,8 +96,10 @@ class RequestTemplate:
     __slots__ = ("_request_args",)
     _request_args: _CompleteRequestArgs
 
-    def __init__(self, method: HTTP_METHOD, url: str, **kwargs: _OptionalRequestsArgs) -> None:
-        self._request_args = {"method": method, "url": url, **kwargs}  # type: ignore
+    def __init__(
+        self, method: HTTP_METHOD, url: str, **kwargs: Unpack[_OptionalRequestsArgs]
+    ) -> None:
+        self._request_args = {"method": method, "url": url, **kwargs}
 
     @overload
     def request(self, http_client: RequestLike[R_co]) -> R_co: ...
@@ -199,8 +206,82 @@ def _test2(template: RequestTemplate) -> None:
     print(r2, j2, r3, j3)
 
 
+class GreatValueResponse(NamedTuple):
+    response: HTTPResponse
+
+    def json(self, **kwargs: Any) -> Incomplete:  # noqa: ANN401, ARG002
+        import json
+
+        return json.loads(self.response.read())
+
+    def raise_for_status(self) -> Any:  # noqa: ANN401
+        # status = self.response.status
+        # if status >= 400:
+        #     msg = f"HTTP status code: {status}"
+        #     raise Exception(msg)
+        # return self.response
+        ...
+
+
+class GreatValueRequests(NamedTuple):
+    base_url: str | None = None
+    unverifiable: bool = True
+    headers: dict[str, str] | None = None
+
+    def construct_url(self, base_url: str | None, endpoint: str, params: _Params) -> str:
+        if base_url is not None and not endpoint.startswith("http"):
+            endpoint = f"{base_url}{endpoint}"
+        if params is not None:
+            tl = params if isinstance(params, (tuple, list)) else params.items()
+            endpoint += "?" + "&".join(f"{k}={v}" for k, v in tl)
+        return endpoint
+
+    def request(
+        self, method: HTTP_METHOD, url: str, **kwargs: Unpack[_OptionalRequestsArgs]
+    ) -> GreatValueResponse:
+        final_url = self.construct_url(self.base_url, url, kwargs.get("params"))
+        import urllib.request
+
+        headers = {
+            k.upper(): v
+            for k, v in (*(self.headers or {}).items(), *(kwargs.get("headers") or {}).items())
+        }
+
+        req = urllib.request.Request(  # noqa: S310
+            url=final_url,
+            data=kwargs.get("data"),  # type: ignore[arg-type]
+            headers=headers,
+            # origin_req_host=None,
+            unverifiable=self.unverifiable,
+            method=method,
+        )
+        response: HTTPResponse = urllib.request.urlopen(  # noqa: S310
+            url=req,
+            data=None,
+            timeout=kwargs.get("timeout"),
+            # cafile=None,
+            # capath=None,
+            # cadefault=False,
+            # context=None,
+        )
+
+        return GreatValueResponse(response=response)
+
+
 def _test() -> None:
-    template: RequestTemplate = RequestTemplate(method="GET", url="http://ip.jsontest.com/")
+    template = RequestTemplate(
+        method="GET",
+        url="http://ip.jsontest.com/",
+        headers={"User-Agent": "Mozilla/5.0"},
+    )
+
+    gv_requests = GreatValueRequests()
+    # w: ResponseLike = GreatValueResponse()
+
+    a = template.request(gv_requests)
+
+    print(a)
+
     _test1(template)
     # _test2(template)
 
