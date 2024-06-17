@@ -154,15 +154,8 @@ docstring-code-line-length = 100
   "INP001", # implicit-namespace-package
 ]
 
-[tool.tox]
-legacy_tox_ini = """
-    [tox]
-    skip_missing_interpreters = True
-    envlist = py38, py39, py310, py311, py312
-
-    [testenv]
-    deps = pytest
-    commands =
-        ; mypy --ignore-missing-imports --scripts-are-modules comma
-        pytest -W ignore::DeprecationWarning -W ignore::PendingDeprecationWarning {posargs:tests}
-"""
+[tool.codeflash]
+module-root = "src"
+tests-root = "tests"
+test-framework = "pytest"
+ignore-paths = []
