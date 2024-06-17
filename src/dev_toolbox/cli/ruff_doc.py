@@ -1,46 +1,33 @@
 from __future__ import annotations
 
-import contextlib
 import itertools
 import os
-from typing import Generator
-from typing import MutableMapping
 from typing import Sequence
-from typing import TYPE_CHECKING
 
 from dev_toolbox.cli.html_table import get_column_widths
 from dev_toolbox.cli.html_table import TablesParser
-
-if TYPE_CHECKING:
-    import http.client
+from dev_toolbox.http import RequestTemplate
+from dev_toolbox.http.great_value import gv_request
 
 
 RUFF_URL = "https://docs.astral.sh/ruff/rules/"
 _FILE_CACHE = "/tmp/ruff_rules.html"  # noqa: S108
 
 
-@contextlib.contextmanager
-def get_request(
-    url: str, headers: MutableMapping[str, str]
-) -> Generator[http.client.HTTPResponse, None, None]:
-    import urllib.request
-
-    request = urllib.request.Request(url, headers=headers)  # noqa: S310
-
-    with urllib.request.urlopen(request) as f:  # noqa: S310
-        yield f
+ruff_rules_template = RequestTemplate(
+    url=RUFF_URL,
+    headers={
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0",  # noqa: E501
+        "Host": "docs.astral.sh",
+    },
+)
 
 
 def _get_rules_html() -> str:
     if not os.path.exists(_FILE_CACHE):
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0",  # noqa: E501
-            "Host": "docs.astral.sh",
-        }
-        with get_request(
-            RUFF_URL,
-            headers,
-        ) as response, open(_FILE_CACHE, "wb") as f:
+        with ruff_rules_template.request(gv_request).response as response, open(
+            _FILE_CACHE, "wb"
+        ) as f:
             f.write(response.read())
 
     with open(_FILE_CACHE) as f:
