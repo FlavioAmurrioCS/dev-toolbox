@@ -153,9 +153,3 @@ docstring-code-line-length = 100
   "E501",   # line-too-long
   "INP001", # implicit-namespace-package
 ]
-
-[tool.codeflash]
-module-root = "src"
-tests-root = "tests"
-test-framework = "pytest"
-ignore-paths = []
