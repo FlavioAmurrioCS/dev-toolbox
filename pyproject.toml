@@ -54,6 +54,15 @@ dependencies = [
   "pytest",
   "setuptools-scm",
 ]
+
+[tool.hatch.envs.hatch-test]
+extra-dependencies = [
+  "requests",
+  "httpx",
+  "urllib3<=2.0.0",
+  "pytest-asyncio",
+
+]
 [tool.hatch.envs.default.scripts]
 test = "pytest {args:tests}"
 test-cov = "coverage run -m pytest {args:tests}"
