@@ -48,10 +48,15 @@ if TYPE_CHECKING:
 
         def raise_for_status(self) -> Any: ...  # noqa: ANN401
 
+    ResponseLike_co = TypeVar(
+        "ResponseLike_co",
+        covariant=True,  #
+        bound=ResponseLike,  #
+    )
+
     R_co = TypeVar(
         "R_co",
         covariant=True,  #
-        bound=ResponseLike,  #
     )
 
     class RequestLike(Protocol[R_co]):
