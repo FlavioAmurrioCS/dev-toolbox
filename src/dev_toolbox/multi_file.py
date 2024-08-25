@@ -194,7 +194,7 @@ class MultiFileOpenerSequence(MultiFileOpener[_LiteralStringT, _IOT]):
 
     """  # noqa: E501
 
-    def __init__(  # noqa: PLR0913
+    def __init__(
         self,
         *,
         filenames: Sequence[_LiteralStringT],

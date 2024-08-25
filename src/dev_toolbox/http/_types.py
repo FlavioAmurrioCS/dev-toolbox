@@ -50,13 +50,13 @@ if TYPE_CHECKING:
 
     ResponseLike_co = TypeVar(
         "ResponseLike_co",
-        covariant=True,  #
-        bound=ResponseLike,  #
+        covariant=True,
+        bound=ResponseLike,
     )
 
     R_co = TypeVar(
         "R_co",
-        covariant=True,  #
+        covariant=True,
     )
 
     class RequestLike(Protocol[R_co]):

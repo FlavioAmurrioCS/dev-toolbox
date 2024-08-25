@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from _typeshed import Incomplete
 
 
-@pytest.fixture()
+@pytest.fixture
 def template() -> RequestTemplate:
     from dev_toolbox.http import RequestTemplate
 
@@ -61,7 +61,7 @@ def test_httpx(template: RequestTemplate) -> None:
 pytest_plugins = ("pytest_asyncio",)
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_httpx_async(template: RequestTemplate) -> None:
     import httpx
 

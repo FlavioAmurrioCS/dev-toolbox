@@ -7,8 +7,8 @@ try:
 except (ImportError, LookupError):
     try:
         from dev_toolbox._version import (  # type: ignore[no-redef,unused-ignore] # noqa: F401
-            __version__,  #
+            __version__,
         )
     except ModuleNotFoundError:
         msg = "dev-toolbox is not correctly installed. Please install it with pip."
-        raise RuntimeError(msg)  # noqa: B904, TRY200
+        raise RuntimeError(msg)  # noqa: B904
