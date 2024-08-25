@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "dev-toolbox"
 dynamic = ["version"]
-description = ''
+description = 'A collection of useful tools for Python developers.'
 readme = "README.md"
 requires-python = ">=3.8"
 license = "MIT"
@@ -40,6 +40,7 @@ dev-tree = "dev_toolbox.cli.tree:main"
 dev-version-bump = "dev_toolbox.cli.version_bump:main"
 dev-ruff-doc = "dev_toolbox.cli.ruff_doc:main"
 dev-html-table = "dev_toolbox.cli.html_table:main"
+dev-schema-to-types = "dev_toolbox.codegen.schema_parser:main"
 
 [tool.hatch.version]
 source = "vcs"
