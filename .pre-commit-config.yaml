@@ -1,5 +1,5 @@
 ci:
-  skip: [hatch-test]
+  skip: [hatch-test, taplo-lint]
 repos:
   - repo: https://github.com/ComPWA/mirrors-taplo
     rev: "v0.9.3"
@@ -32,6 +32,8 @@ repos:
     rev: v1.11.1
     hooks:
       - id: mypy
+        additional_dependencies:
+          - types-requests
   - repo: local
     hooks:
       - id: hatch-test
