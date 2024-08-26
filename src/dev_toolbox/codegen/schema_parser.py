@@ -23,6 +23,7 @@ if TYPE_CHECKING:
         type: Literal["object"]
         properties: dict[str, JsonSchema]
         required: NotRequired[list[str]]
+        additionalProperties: NotRequired[JsonSchema]
 
     class PrimitiveDraft(TypedDict):
         type: Literal["string", "number", "integer", "boolean"]
@@ -90,12 +91,32 @@ def enum_draft_is(value: JsonSchema) -> TypeIs[EnumDraft]:
 ###############################################################################
 
 
+def to_pascal_case(snake_str: str) -> str:
+    components = snake_str.split("_")
+    return "".join(x.title() for x in components)
+
+
 def object_draft_parse(
-    *, draft: ObjectDraft, property_name: str, lines: list[tuple[str, ...]]
+    *, draft: ObjectDraft, property_name: str, lines: dict[tuple[str, ...], None]
 ) -> str:
+    property_name = str(draft.get("title", property_name))
     pattern = re.compile(r"^[a-zA-Z_][a-zA-Z0-9_]*$")
-    has_proper_properties_names = all(pattern.match(name) for name in draft["properties"])
-    clazz_name = property_name.capitalize()
+    properties = draft.get("properties", {})
+    if not properties:
+        # Note: Not sure if this is the best way to handle this case.
+        type_s = _parse_draft(
+            draft=draft.get("additionalProperties", {}),  # type: ignore[arg-type]
+            property_name=property_name,
+            lines=lines,
+        )
+        return f"Dict[str, {type_s}]"
+    has_proper_properties_names = all(pattern.match(name) for name in properties)
+    clazz_name = property_name
+    if clazz_name[0].upper() != clazz_name[0]:
+        # clazz_name = clazz_name.capitalize()  # Rethink capitalization to be CamelCase
+        clazz_name = to_pascal_case(clazz_name)  # Rethink capitalization to be CamelCase
+    if clazz_name.isnumeric():
+        clazz_name = f"_{clazz_name}"
 
     start = f"class {clazz_name}(TypedDict):"
     end = ""
@@ -108,25 +129,27 @@ def object_draft_parse(
         qoutes = '"'
     buffer = [start]
     required = set(draft.get("required", []))
-    for name, ztype in draft["properties"].items():
+    for name, ztype in properties.items():
         type_s = _parse_draft(draft=ztype, property_name=name, lines=lines)
         if name not in required:
             type_s = f"NotRequired[{type_s}]"
         buffer.append(f"    {qoutes}{name}{qoutes}: {type_s}{joiner}")
 
     buffer.append(end)
-    lines.append(tuple(buffer))
+    lines[tuple(buffer)] = None
 
     return clazz_name
 
 
-def _parse_draft(*, draft: JsonSchema, property_name: str, lines: list[tuple[str, ...]]) -> str:  # noqa: PLR0911
+def _parse_draft(  # noqa: PLR0911
+    *, draft: JsonSchema, property_name: str, lines: dict[tuple[str, ...], None]
+) -> str:
     if not draft:
         return "Any"
     if enum_draft_is(draft):
         type_s = ",\n    ".join([f'"{x}"' for x in draft["enum"]])
         clazz_name = property_name.capitalize()
-        lines.append((f"{clazz_name} = Literal[\n    {type_s},\n]",))
+        lines[(f"{clazz_name} = Literal[\n    {type_s},\n]",)] = None
         return clazz_name
     if ref_draft_is(draft):
         return draft["$ref"].rsplit("/", maxsplit=1)[-1]
@@ -144,7 +167,7 @@ def _parse_draft(*, draft: JsonSchema, property_name: str, lines: list[tuple[str
         if draft.get("title") is None:
             return types_str
         clazz_name: str = draft["title"]  # type: ignore
-        lines.append((f"{clazz_name} = {types_str}",))
+        lines[(f"{clazz_name} = {types_str}",)] = None
         return f"{clazz_name}"
     if primitive_draft_is(draft):
         return PRIMITIVE_TYPE_CONVERSION[draft["type"]]
@@ -157,13 +180,13 @@ def _parse_draft(*, draft: JsonSchema, property_name: str, lines: list[tuple[str
 
 
 def schema_to_types(schema: JsonSchema) -> str:
-    lines: list[tuple[str, ...]] = [
+    lines: dict[tuple[str, ...], None] = {
         (
-            "from typing import TypedDict, Union, Literal, List",
+            "from typing import TypedDict, Union, Literal, List, Dict",
             "from typing_extensions import NotRequired",
             "",
-        )
-    ]
+        ): None
+    }
     definitions: dict[str, JsonSchema] = schema.get("definitions", {})  # type: ignore[assignment]
     for key, value in reversed(definitions.items()):
         _parse_draft(draft=value, property_name=key, lines=lines)
@@ -222,11 +245,88 @@ def main(argv: Sequence[str] | None = None) -> int:
     return 0
 
 
-if __name__ == "__main__":
-    raise SystemExit(
-        main(
-            [
-                "--input=/Users/flavio/dev/github.com/FlavioAmurrioCS/dev-toolbox/tests/codegen_resources/book_schema.json"
-            ]
-        )
+def _test() -> None:
+    from dev_toolbox.http.great_value import gv_request
+    from dev_toolbox.multi_file import MultiFileOpener
+    import os
+    import subprocess
+    import json
+    from textwrap import dedent
+
+    python_code = dedent("""\
+        from genson import SchemaBuilder
+        import json
+        import sys
+        builder = SchemaBuilder()
+        file = sys.argv[1]
+        with open(file) as f:
+            builder.add_object(json.load(f))
+        print(builder.to_json(indent=2))
+        """)
+
+    files = (
+        "getting-started.json",
+        "bitcoin-block.json",
+        "null-safe.json",
+        "pokedex.json",
+        "simple-object.json",
+        "spotify-album.json",
+        "us-senators.json",
+        "kitchen-sink.json",
+        "reddit.json",
+        "us-avg-temperatures.json",
+        "github-events.json",  # Report genson issue
     )
+    with MultiFileOpener(  # type: ignore[var-annotated]
+        filenames=("genson", "quicktype"),
+        base_dir="/tmp",  # noqa: S108
+        extension=".py",
+    ) as mfo:
+        for file in files:
+            filepath = "/tmp/" + file  # noqa: S108
+            print(file)
+            if not os.path.exists(filepath):
+                response = gv_request.request(
+                    "GET",
+                    f"https://raw.githubusercontent.com/glideapps/quicktype/master/test/inputs/json/samples/{file}",
+                )
+                with open(filepath, "wb") as f:
+                    f.write(response.response.read())
+
+            mfo["genson"].write("#" * 100 + "\n# region: " + file + "\n" + "#" * 100 + "\n\n")
+            try:
+                result = subprocess.run(  # noqa: S603
+                    [
+                        "/Users/flavio/opt/runtool/pipx_home/venvs/genson/bin/python",
+                        "-c",
+                        python_code,
+                        filepath,
+                    ],
+                    # ["/Users/flavio/opt/runtool/bin/genson", filepath],
+                    check=True,
+                    capture_output=True,
+                )
+                schema = json.loads(result.stdout)
+                mfo["genson"].write(schema_to_types(schema) + "\n")
+            except Exception as e:
+                mfo["genson"].write(f"# Error: {e}\n")
+                raise
+            mfo["genson"].write("#" * 100 + "\n# endregion: " + file + "\n" + "#" * 100 + "\n\n")
+
+            mfo["quicktype"].write("#" * 100 + "\n# region: " + file + "\n" + "#" * 100 + "\n\n")
+            try:
+                result = subprocess.run(  # noqa: S603
+                    ["/Users/flavio/.node_global/bin/quicktype", "--lang=schema", filepath],
+                    check=True,
+                    capture_output=True,
+                )
+                schema = json.loads(result.stdout)
+                mfo["quicktype"].write(schema_to_types(schema) + "\n")
+            except Exception as e:
+                mfo["quicktype"].write(f"# Error: {e}\n")
+                raise
+            mfo["quicktype"].write("#" * 100 + "\n# endregion: " + file + "\n" + "#" * 100 + "\n\n")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
