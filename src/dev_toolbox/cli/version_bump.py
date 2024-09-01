@@ -97,7 +97,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     print(f"Old version: {latest_tag}")
     print(f"New version: {_new_version_tag}")
 
-    if input("Should we tag and push the new version?").lower() not in {"yes", "y"}:
+    if input("Should we tag and push the new version? ").lower() not in {"yes", "y"}:
         return 0
 
     quick_run(("git", "tag", _new_version_tag))

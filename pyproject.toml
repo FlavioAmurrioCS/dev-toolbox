@@ -150,6 +150,7 @@ ignore = [
   "D203",   # one-blank-line-before-class
   "D212",   # multi-line-summary-first-line
   "D401",   # non-imperative-mood
+  "D417",
 ]
 
 [tool.ruff.format]
@@ -159,7 +160,8 @@ docstring-code-line-length = 100
 # https://github.com/astral-sh/ruff/issues/4368
 [tool.ruff.lint.per-file-ignores]
 "tests/**/*.py" = [
-  "S101",   # assert
-  "E501",   # line-too-long
-  "INP001", # implicit-namespace-package
+  "S101",    # assert
+  "E501",    # line-too-long
+  "INP001",  # implicit-namespace-package
+  "PLR2004",
 ]
