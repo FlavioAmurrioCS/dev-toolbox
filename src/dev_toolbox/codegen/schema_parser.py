@@ -245,87 +245,87 @@ def main(argv: Sequence[str] | None = None) -> int:
     return 0
 
 
-def _test() -> None:
-    from dev_toolbox.http.great_value import gv_request
-    from dev_toolbox.multi_file import MultiFileOpener
-    import os
-    import subprocess
-    import json
-    from textwrap import dedent
+# def _test() -> None:
+#     from dev_toolbox.http.great_value import gv_request
+#     from dev_toolbox.multi_file import MultiFileOpener
+#     import os
+#     import subprocess
+#     import json
+#     from textwrap import dedent
 
-    python_code = dedent("""\
-        from genson import SchemaBuilder
-        import json
-        import sys
-        builder = SchemaBuilder()
-        file = sys.argv[1]
-        with open(file) as f:
-            builder.add_object(json.load(f))
-        print(builder.to_json(indent=2))
-        """)
+#     python_code = dedent("""\
+#         from genson import SchemaBuilder
+#         import json
+#         import sys
+#         builder = SchemaBuilder()
+#         file = sys.argv[1]
+#         with open(file) as f:
+#             builder.add_object(json.load(f))
+#         print(builder.to_json(indent=2))
+#         """)
 
-    files = (
-        "getting-started.json",
-        "bitcoin-block.json",
-        "null-safe.json",
-        "pokedex.json",
-        "simple-object.json",
-        "spotify-album.json",
-        "us-senators.json",
-        "kitchen-sink.json",
-        "reddit.json",
-        "us-avg-temperatures.json",
-        "github-events.json",  # Report genson issue
-    )
-    with MultiFileOpener(  # type: ignore[var-annotated]
-        filenames=("genson", "quicktype"),
-        base_dir="/tmp",  # noqa: S108
-        extension=".py",
-    ) as mfo:
-        for file in files:
-            filepath = "/tmp/" + file  # noqa: S108
-            print(file)
-            if not os.path.exists(filepath):
-                response = gv_request.request(
-                    "GET",
-                    f"https://raw.githubusercontent.com/glideapps/quicktype/master/test/inputs/json/samples/{file}",
-                )
-                with open(filepath, "wb") as f:
-                    f.write(response.response.read())
+#     files = (
+#         "getting-started.json",
+#         "bitcoin-block.json",
+#         "null-safe.json",
+#         "pokedex.json",
+#         "simple-object.json",
+#         "spotify-album.json",
+#         "us-senators.json",
+#         "kitchen-sink.json",
+#         "reddit.json",
+#         "us-avg-temperatures.json",
+#         "github-events.json",  # Report genson issue
+#     )
+#     with MultiFileOpener(  # type: ignore[var-annotated]
+#         filenames=("genson", "quicktype"),
+#         base_dir="/tmp",
+#         extension=".py",
+#     ) as mfo:
+#         for file in files:
+#             filepath = "/tmp/" + file
+#             print(file)
+#             if not os.path.exists(filepath):
+#                 response = gv_request.request(
+#                     method="GET",
+#                     url=f"https://raw.githubusercontent.com/glideapps/quicktype/master/test/inputs/json/samples/{file}",
+#                 )
+#                 with open(filepath, "wb") as f:
+#                     f.write(response.response.read())
 
-            mfo["genson"].write("#" * 100 + "\n# region: " + file + "\n" + "#" * 100 + "\n\n")
-            try:
-                result = subprocess.run(  # noqa: S603
-                    [
-                        "/Users/flavio/opt/runtool/pipx_home/venvs/genson/bin/python",
-                        "-c",
-                        python_code,
-                        filepath,
-                    ],
-                    # ["/Users/flavio/opt/runtool/bin/genson", filepath],
-                    check=True,
-                    capture_output=True,
-                )
-                schema = json.loads(result.stdout)
-                mfo["genson"].write(schema_to_types(schema) + "\n")
-            except Exception as e:
-                mfo["genson"].write(f"# Error: {e}\n")
-                raise
-            mfo["genson"].write("#" * 100 + "\n# endregion: " + file + "\n" + "#" * 100 + "\n\n")
+#             mfo["genson"].write("#" * 100 + "\n# region: " + file + "\n" + "#" * 100 + "\n\n")
+#             try:
+#                 result = subprocess.run(
+#                     [
+#                         "/Users/flavio/opt/runtool/pipx_home/venvs/genson/bin/python",
+#                         "-c",
+#                         python_code,
+#                         filepath,
+#                     ],
+#                     # ["/Users/flavio/opt/runtool/bin/genson", filepath],
+#                     check=True,
+#                     capture_output=True,
+#                 )
+#                 schema = json.loads(result.stdout)
+#                 mfo["genson"].write(schema_to_types(schema) + "\n")
+#             except Exception as e:
+#                 mfo["genson"].write(f"# Error: {e}\n")
+#                 raise
+#             mfo["genson"].write("#" * 100 + "\n# endregion: " + file + "\n" + "#" * 100 + "\n\n")
 
-            mfo["quicktype"].write("#" * 100 + "\n# region: " + file + "\n" + "#" * 100 + "\n\n")
-            try:
-                result = subprocess.run(  # noqa: S603
-                    ["/Users/flavio/.node_global/bin/quicktype", "--lang=schema", filepath],
-                    check=True,
-                    capture_output=True,
-                )
-                schema = json.loads(result.stdout)
-                mfo["quicktype"].write(schema_to_types(schema) + "\n")
-            except Exception as e:
-                mfo["quicktype"].write(f"# Error: {e}\n")
-                raise
-            mfo["quicktype"].write("#" * 100 + "\n# endregion: " + file + "\n" + "#" * 100 + "\n\n")
+#             mfo["quicktype"].write("#" * 100 + "\n# region: " + file + "\n" + "#" * 100 + "\n\n")
+#             try:
+#                 result = subprocess.run(
+#                     ["/Users/flavio/.node_global/bin/quicktype", "--lang=schema", filepath],
+#                     check=True,
+#                     capture_output=True,
+#                 )
+#                 schema = json.loads(result.stdout)
+#                 mfo["quicktype"].write(schema_to_types(schema) + "\n")
+#             except Exception as e:
+#                 mfo["quicktype"].write(f"# Error: {e}\n")
+#                 raise
+#             mfo["quicktype"].write("#" * 100 + "\n# endregion: " + file + "\n" + "#" * 100 + "\n\n")  # noqa: E501
 
 
 if __name__ == "__main__":

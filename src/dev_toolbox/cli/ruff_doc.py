@@ -16,6 +16,7 @@ _FILE_CACHE = "/tmp/ruff_rules.html"  # noqa: S108
 
 ruff_rules_template = RequestTemplate(
     url=RUFF_URL,
+    method="GET",
     headers={
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0",  # noqa: E501
         "Host": "docs.astral.sh",

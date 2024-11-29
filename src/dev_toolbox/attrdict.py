@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from dev_toolbox._types import JSON_TYPE
+    from dev_toolbox._types import JSONValue
 
 
 class AttrDict(dict):  # type:ignore[type-arg]
@@ -36,13 +36,13 @@ class AttrDict(dict):  # type:ignore[type-arg]
 
     __slots__ = ()
 
-    def __getattr__(self, attr: str) -> JSON_TYPE:
+    def __getattr__(self, attr: str) -> JSONValue:
         try:
             return self[attr]
         except KeyError:
             raise AttributeError(attr) from None
 
-    def __setattr__(self, attr: str, value: JSON_TYPE) -> None:
+    def __setattr__(self, attr: str, value: JSONValue) -> None:
         self[attr] = value
 
     def __delattr__(self, attr: str) -> None:

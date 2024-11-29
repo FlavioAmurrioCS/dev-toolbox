@@ -18,6 +18,8 @@ if TYPE_CHECKING:
     from typing_extensions import Protocol
     from typing_extensions import Unpack
 
+    from typing_extensions import NotRequired
+
     FileContent = Union[IO[bytes], bytes, str]
     _FileSpec = Union[
         FileContent,
@@ -25,23 +27,19 @@ if TYPE_CHECKING:
     ]
     _Params = Union[Dict[str, Any], Tuple[Tuple[str, Any], ...], List[Tuple[str, Any]], None]
 
-    class _OptionalRequestsArgs(TypedDict, total=False):
-        auth: tuple[str, str] | None
-        cookies: dict[str, str] | None
-        data: Mapping[str, Any] | None
-        files: Mapping[str, _FileSpec]
-        headers: Mapping[str, Any] | None
-        json: Any | None
-        params: _Params
-        timeout: float | None
-
     HTTP_METHOD = Literal["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS", "TRACE"]
 
-    class _RequieredRequestsArgs(TypedDict):
-        method: HTTP_METHOD
+    class _CompleteRequestArgs(TypedDict):
         url: str
-
-    class _CompleteRequestArgs(_RequieredRequestsArgs, _OptionalRequestsArgs): ...
+        method: HTTP_METHOD
+        auth: NotRequired[tuple[str, str] | None]
+        cookies: NotRequired[dict[str, str] | None]
+        data: NotRequired[Mapping[str, Any] | None]
+        files: NotRequired[Mapping[str, _FileSpec]]
+        headers: NotRequired[Mapping[str, Any] | None]
+        json: NotRequired[Any | None]
+        params: NotRequired[_Params]
+        timeout: NotRequired[float | None]
 
     class ResponseLike(Protocol):
         def json(self) -> Any: ...  # noqa: ANN401
@@ -60,11 +58,7 @@ if TYPE_CHECKING:
     )
 
     class RequestLike(Protocol[R_co]):
-        def request(
-            self, method: HTTP_METHOD, url: str, **kwargs: Unpack[_OptionalRequestsArgs]
-        ) -> R_co: ...
+        def request(self, **kwargs: Unpack[_CompleteRequestArgs]) -> R_co: ...
 
     class RequestLikeAsync(Protocol[R_co]):
-        async def request(
-            self, method: HTTP_METHOD, url: str, **kwargs: Unpack[_OptionalRequestsArgs]
-        ) -> R_co: ...
+        async def request(self, **kwargs: Unpack[_CompleteRequestArgs]) -> R_co: ...
