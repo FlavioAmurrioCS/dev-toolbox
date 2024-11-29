@@ -16,6 +16,7 @@ def template() -> RequestTemplate:
 
     return RequestTemplate(
         url="http://ip.jsontest.com/",
+        method="GET",
         headers={"User-Agent": "Mozilla/5.0"},
     )
 

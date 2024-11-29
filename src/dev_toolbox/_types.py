@@ -14,8 +14,8 @@ if TYPE_CHECKING:
 
     _T = TypeVar("_T")
 
-    JSON_TYPE: TypeAlias = Union[
-        str, int, float, bool, None, List["JSON_TYPE"], Dict[str, "JSON_TYPE"]
+    JSONValue: TypeAlias = Union[
+        str, int, float, bool, None, List["JSONValue"], Dict[str, "JSONValue"]
     ]
 
 
@@ -26,7 +26,7 @@ def is_list_of(lst: Sequence[object], tp: type[_T]) -> TypeGuard[list[_T]]:
 def is_namedtuple(obj: object) -> TypeGuard[NamedTuple]:
     t = type(obj)
     b = t.__bases__
-    if len(b) != 1 or b[0] != tuple:  # noqa: E721
+    if len(b) != 1 or b[0] is not tuple:
         return False
     f = getattr(t, "_fields", None)
     if not isinstance(f, tuple):

@@ -7,12 +7,11 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
+    from dev_toolbox.http._types import _CompleteRequestArgs
     from http.client import HTTPResponse
     from _typeshed import Incomplete
     from typing_extensions import Unpack
     from dev_toolbox.http._types import _Params
-    from dev_toolbox.http._types import _OptionalRequestsArgs
-    from dev_toolbox.http._types import HTTP_METHOD
 
 
 class GreatValueResponse(NamedTuple):
@@ -52,9 +51,9 @@ class GreatValueRequests(NamedTuple):
             endpoint += "?" + encoded
         return endpoint
 
-    def request(
-        self, method: HTTP_METHOD, url: str, **kwargs: Unpack[_OptionalRequestsArgs]
-    ) -> GreatValueResponse:
+    def request(self, **kwargs: Unpack[_CompleteRequestArgs]) -> GreatValueResponse:
+        url = kwargs["url"]
+        method = kwargs["method"]
         final_url = self.construct_url(self.base_url, url, kwargs.get("params"))
         import urllib.request
 
