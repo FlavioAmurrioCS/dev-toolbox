@@ -15,7 +15,7 @@ def template() -> RequestTemplate:
     from dev_toolbox.http import RequestTemplate
 
     return RequestTemplate(
-        url="http://ip.jsontest.com/",
+        url="https://raw.githubusercontent.com/ultrajson/ultrajson/refs/heads/main/tests/334-reproducer.json",
         method="GET",
         headers={"User-Agent": "Mozilla/5.0"},
     )

@@ -175,7 +175,7 @@ def _parse_draft(  # noqa: PLR0911
         types_str = ", ".join(PRIMITIVE_TYPE_CONVERSION[x] for x in draft["type"])
         return f"Union[{types_str}]"
     msg = f"Unknown draft type {draft=}"
-    logging.error(msg)
+    logging.error(msg)  # noqa: LOG015
     return "Any"
 
 

@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from dev_toolbox.http._types import RequestLikeAsync
     from typing_extensions import Unpack
     from typing import Awaitable
-    from _typeshed import Incomplete  # noqa: F401
+    from _typeshed import Incomplete
 
 
 S = TypeVar("S", default="Incomplete")
