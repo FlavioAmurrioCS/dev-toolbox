@@ -5,10 +5,13 @@ import re
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from typing import Literal
     from typing import Sequence
-    from typing import Literal, TypedDict, Union
-    from typing_extensions import TypeIs
+    from typing import TypedDict
+    from typing import Union
+
     from typing_extensions import NotRequired
+    from typing_extensions import TypeIs
 
     RefDraft = TypedDict("RefDraft", {"$ref": str})
 
@@ -198,8 +201,8 @@ def schema_to_types(schema: JsonSchema) -> str:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    import json
     import argparse
+    import json
     from textwrap import dedent
 
     class CustomFormatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawTextHelpFormatter):

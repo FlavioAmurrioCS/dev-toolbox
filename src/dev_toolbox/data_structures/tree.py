@@ -4,14 +4,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 from dataclasses import field
 from functools import lru_cache
+from typing import TYPE_CHECKING
 from typing import Callable
 from typing import Generator
 from typing import Generic
 from typing import Hashable
 from typing import Sequence
-from typing import TYPE_CHECKING
 from typing import TypeVar
-
 
 if TYPE_CHECKING:
     from typing_extensions import Self

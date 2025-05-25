@@ -2,15 +2,16 @@ from __future__ import annotations
 
 import json
 import urllib.parse
-from typing import NamedTuple
 from typing import TYPE_CHECKING
-
+from typing import NamedTuple
 
 if TYPE_CHECKING:
-    from dev_toolbox.http._types import _CompleteRequestArgs
     from http.client import HTTPResponse
+
     from _typeshed import Incomplete
     from typing_extensions import Unpack
+
+    from dev_toolbox.http._types import _CompleteRequestArgs
     from dev_toolbox.http._types import _Params
 
 

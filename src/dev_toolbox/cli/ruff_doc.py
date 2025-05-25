@@ -4,11 +4,10 @@ import itertools
 import os
 from typing import Sequence
 
-from dev_toolbox.cli.html_table import get_column_widths
 from dev_toolbox.cli.html_table import TablesParser
+from dev_toolbox.cli.html_table import get_column_widths
 from dev_toolbox.http import RequestTemplate
 from dev_toolbox.http.great_value import gv_request
-
 
 RUFF_URL = "https://docs.astral.sh/ruff/rules/"
 _FILE_CACHE = "/tmp/ruff_rules.html"  # noqa: S108

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from html.parser import HTMLParser
+from typing import TYPE_CHECKING
 from typing import List
 from typing import Sequence
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from typing_extensions import TypeAlias  # pyright: ignore[reportShadowedImports]

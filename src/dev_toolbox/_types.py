@@ -1,16 +1,16 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
 from typing import Dict
 from typing import List
 from typing import NamedTuple
 from typing import Sequence
-from typing import TYPE_CHECKING
 from typing import TypeVar
 from typing import Union
 
 if TYPE_CHECKING:
-    from typing_extensions import TypeGuard
     from typing_extensions import TypeAlias
+    from typing_extensions import TypeGuard
 
     _T = TypeVar("_T")
 

@@ -7,18 +7,19 @@ import re
 import tempfile
 import zipfile
 from email.parser import BytesParser
+from typing import TYPE_CHECKING
 from typing import Mapping
 from typing import NamedTuple
-from typing import TYPE_CHECKING
 from typing import TypedDict
 from typing import TypeVar
 from urllib.parse import urljoin
 from urllib.parse import urlparse
 
 if TYPE_CHECKING:
-    import requests
     from email.message import Message
+
     import httpx
+    import requests
 
     T = TypeVar("T", bound=Mapping)
 

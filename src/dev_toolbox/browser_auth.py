@@ -7,17 +7,17 @@ from typing import TYPE_CHECKING
 from urllib.parse import parse_qs
 from wsgiref.simple_server import make_server
 
-
 if TYPE_CHECKING:
+    from typing import Callable
+    from typing import Iterable
+    from typing import Literal
+    from typing import MutableMapping
+    from typing import TypedDict
     from typing import TypeVar
     from wsgiref.types import StartResponse
-    from typing import MutableMapping
-    from typing_extensions import TypeAlias
-    from typing_extensions import Any
 
-    from typing import Callable, Iterable
-    from typing import TypedDict
-    from typing import Literal
+    from typing_extensions import Any
+    from typing_extensions import TypeAlias
 
     R = TypeVar("R")
 

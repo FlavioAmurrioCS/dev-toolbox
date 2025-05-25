@@ -1,23 +1,25 @@
 from __future__ import annotations
 
 from inspect import isawaitable
-from typing import cast
-from typing import Generic
-from typing import overload
 from typing import TYPE_CHECKING
+from typing import Generic
+from typing import cast
+from typing import overload
 
 from typing_extensions import TypeVar
 
 if TYPE_CHECKING:
+    from typing import Awaitable
+
+    from _typeshed import Incomplete
     from typing_extensions import Literal
-    from dev_toolbox.http._types import _CompleteRequestArgs
-    from dev_toolbox.http._types import ResponseLike_co
+    from typing_extensions import Unpack
+
     from dev_toolbox.http._types import R_co
     from dev_toolbox.http._types import RequestLike
     from dev_toolbox.http._types import RequestLikeAsync
-    from typing_extensions import Unpack
-    from typing import Awaitable
-    from _typeshed import Incomplete
+    from dev_toolbox.http._types import ResponseLike_co
+    from dev_toolbox.http._types import _CompleteRequestArgs
 
 
 S = TypeVar("S", default="Incomplete")
