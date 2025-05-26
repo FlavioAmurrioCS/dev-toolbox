@@ -34,7 +34,7 @@ class TablesParser(HTMLParser):
         elif tag == "tr":
             self._table.append(self._row)
         elif tag == "td":
-            self._row.append(self._cell)  # type: ignore
+            self._row.append(self._cell)  # type: ignore[arg-type]
 
     def handle_data(self, data: str) -> None:
         if self._cell is not None:

@@ -159,7 +159,7 @@ def _parse_draft(  # noqa: PLR0911
     if object_draft_is(draft):
         return object_draft_parse(draft=draft, property_name=property_name, lines=lines)
     if array_draft_is(draft):
-        dp: JsonSchema = draft.get("items", {})  # type: ignore
+        dp: JsonSchema = draft.get("items", {})  # type: ignore[assignment]
         parsed_type = _parse_draft(draft=dp, property_name=property_name, lines=lines)
         return f"List[{parsed_type}]"
     if anyof_draft_is(draft):
@@ -169,7 +169,7 @@ def _parse_draft(  # noqa: PLR0911
         types_str = f"Union[{types_str}]"
         if draft.get("title") is None:
             return types_str
-        clazz_name: str = draft["title"]  # type: ignore
+        clazz_name: str = draft["title"]  # type: ignore[typeddict-item,no-redef]
         lines[(f"{clazz_name} = {types_str}",)] = None
         return f"{clazz_name}"
     if primitive_draft_is(draft):

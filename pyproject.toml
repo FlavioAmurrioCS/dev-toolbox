@@ -32,6 +32,7 @@ dependencies = [
 
 [project.optional-dependencies]
 types = [
+  "httpx",
 ]
 tests = [
   "dev-toolbox[types]",

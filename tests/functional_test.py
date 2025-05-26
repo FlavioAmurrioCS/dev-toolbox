@@ -73,7 +73,7 @@ def test_min() -> None:
 
 def test_max() -> None:
     s = Stream([3, 1, 2])
-    assert s.max() == 3
+    assert s.max() == 3  # noqa: PLR2004
 
 
 def test_sorted() -> None:
@@ -93,8 +93,8 @@ def test_first() -> None:
 
 def test_find() -> None:
     s = Stream([1, 2, 3])
-    assert s.find(lambda x: x == 2) == 2
-    assert s.find(lambda x: x == 4) == NoItem
+    assert s.find(lambda x: x == 2) == 2  # noqa: PLR2004
+    assert s.find(lambda x: x == 4) == NoItem  # noqa: PLR2004
 
 
 def test_group_by() -> None:
@@ -136,17 +136,17 @@ def test_to_dict() -> None:
 
 def test_len() -> None:
     s = Stream([1, 2, 3])
-    assert s.len() == 3
+    assert s.len() == 3  # noqa: PLR2004
 
 
 def test_sum() -> None:
     s = Stream([1, 2, 3])
-    assert s.sum() == 6
+    assert s.sum() == 6  # noqa: PLR2004
 
 
 def test_reduce() -> None:
     s = Stream([1, 2, 3])
-    assert s.reduce(lambda x, y: x + y) == 6
+    assert s.reduce(lambda x, y: x + y) == 6  # noqa: PLR2004
 
 
 def test_reverse() -> None:
@@ -182,12 +182,12 @@ def test_drop() -> None:
 
 
 def test_dropwhile() -> None:
-    s = Stream([1, 2, 3, 4]).dropwhile(lambda x: x < 3)
+    s = Stream([1, 2, 3, 4]).dropwhile(lambda x: x < 3)  # noqa: PLR2004
     assert list(s) == [3, 4]
 
 
 def test_takewhile() -> None:
-    s = Stream([1, 2, 3, 4]).takewhile(lambda x: x < 3)
+    s = Stream([1, 2, 3, 4]).takewhile(lambda x: x < 3)  # noqa: PLR2004
     assert list(s) == [1, 2]
 
 
@@ -223,4 +223,4 @@ def test_typing_cast() -> None:
 
 def test_collect() -> None:
     s = Stream([1, 2, 3])
-    assert s.collect(sum) == 6
+    assert s.collect(sum) == 6  # noqa: PLR2004

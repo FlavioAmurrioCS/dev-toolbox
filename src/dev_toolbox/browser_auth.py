@@ -14,8 +14,8 @@ if TYPE_CHECKING:
     from typing import MutableMapping
     from typing import TypedDict
     from typing import TypeVar
-    from wsgiref.types import StartResponse
 
+    from _typeshed.wsgi import StartResponse
     from typing_extensions import Any
     from typing_extensions import TypeAlias
 

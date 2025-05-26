@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     import httpx
     import requests
 
-    T = TypeVar("T", bound=Mapping)
+    T = TypeVar("T", bound=Mapping)  # type: ignore[type-arg]
 
     class Metadata(TypedDict):
         author: str
@@ -76,7 +76,7 @@ def _normalize_string(x: str) -> str:
 
 
 def _parse_message(x: Message[str, str]) -> Metadata:
-    metadata = {}
+    metadata = {}  # type: ignore[var-annotated]
     for key, value in x.items():
         if key in metadata:
             if isinstance(metadata[key], list):
@@ -84,19 +84,19 @@ def _parse_message(x: Message[str, str]) -> Metadata:
             else:
                 metadata[key] = [metadata[key], value]
         else:
-            metadata[key] = value
+            metadata[key] = value  # type: ignore[assignment]
 
-    ret = {_normalize_string(k): v for k, v in metadata.items()}  # type: ignore
-    ret["project_urls"] = {}
+    ret = {_normalize_string(k): v for k, v in metadata.items()}
+    ret["project_urls"] = {}  # type: ignore[assignment]
     items = ret.pop("project_url", [])
     items = items if isinstance(items, list) else [items]
     for line in items:
         key, value = line.split(",", 1)
-        ret["project_urls"][key.strip()] = value.strip()
+        ret["project_urls"][key.strip()] = value.strip()  # type: ignore[call-overload]
     ret["classifiers"] = ret.pop("classifier", [])
     ret.pop("metadata_version", None)
 
-    return ret  # type: ignore
+    return ret  # type: ignore[return-value]
 
 
 def _json_clean(obj: T) -> T:
@@ -105,7 +105,7 @@ def _json_clean(obj: T) -> T:
     )
 
 
-_header = {  # format
+_header: dict[str, str] = {  # format
     # "Accept": "application/vnd.pypi.simple.v1+json"
 }
 
@@ -163,7 +163,7 @@ class PypiIndexApi(NamedTuple):
         except json.JSONDecodeError:
             ret.update(self._get_metadata_from_whl(package_name))
 
-        return _json_clean(ret)  # type: ignore
+        return _json_clean(ret)  # type: ignore[return-value]
 
     def _get_metadata_from_whl(self, package_name: str) -> Metadata:
         latest_wheel_url = max(
@@ -182,5 +182,5 @@ class PypiIndexApi(NamedTuple):
                     raise FileNotFoundError(msg)
                 with zf.open(metadata_path) as metadata_file:
                     ret = _parse_message(BytesParser().parse(metadata_file))
-                    ret.pop("license", None)
+                    ret.pop("license", None)  # type: ignore[misc]
                     return ret
