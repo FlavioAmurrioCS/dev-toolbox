@@ -5,9 +5,9 @@ import argparse
 import signal
 import subprocess
 from functools import partial
+from typing import TYPE_CHECKING
 from typing import NamedTuple
 from typing import Sequence
-from typing import TYPE_CHECKING
 
 from typing_extensions import Self
 

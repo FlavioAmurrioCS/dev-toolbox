@@ -2,23 +2,22 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-
 if TYPE_CHECKING:
+    from typing import IO
+    from typing import Any
     from typing import Dict
     from typing import List
-    from typing import Any
     from typing import Mapping
-    from typing import Union
-    from typing import IO
     from typing import Optional
     from typing import Tuple
     from typing import TypeVar
-    from typing_extensions import Literal
-    from typing_extensions import TypedDict
-    from typing_extensions import Protocol
-    from typing_extensions import Unpack
+    from typing import Union
 
+    from typing_extensions import Literal
     from typing_extensions import NotRequired
+    from typing_extensions import Protocol
+    from typing_extensions import TypedDict
+    from typing_extensions import Unpack
 
     FileContent = Union[IO[bytes], bytes, str]
     _FileSpec = Union[

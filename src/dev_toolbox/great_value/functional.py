@@ -5,21 +5,23 @@ import itertools
 from collections import defaultdict
 from collections.abc import Sized
 from itertools import islice
+from typing import TYPE_CHECKING
 from typing import Generic
 from typing import Iterable
-from typing import overload
-from typing import TYPE_CHECKING
 from typing import TypeVar
-
+from typing import overload
 
 if TYPE_CHECKING:
-    from typing import Generator, TextIO, BinaryIO
     from typing import Any
-    from typing import Iterator
+    from typing import BinaryIO
     from typing import Callable
+    from typing import Generator
     from typing import Hashable
-    from _typeshed import SupportsRichComparisonT
+    from typing import Iterator
+    from typing import TextIO
+
     from _typeshed import SupportsRichComparison
+    from _typeshed import SupportsRichComparisonT
     from typing_extensions import TypeGuard
     from typing_extensions import TypeIs
 
@@ -593,7 +595,7 @@ class Stream(Generic[_T_co], Iterable[_T_co], Sized):
             Stream[tuple[_T_co, ...]]: A Stream of tuples, where each tuple represents a section of consecutive elements
                 from the original Stream that satisfy the given predicate.
 
-        """  # noqa: D205, E501
+        """  # noqa: E501
         # Lazy
         return Stream(self.__sections_helper(self.__items, predicate))
 
@@ -739,7 +741,7 @@ class Stream(Generic[_T_co], Iterable[_T_co], Sized):
         ((((1+2)+3)+4)+5).  If initial is present, it is placed before the items
         of the sequence in the calculation, and serves as a default when the
         sequence is empty.
-        """  # noqa: D205
+        """
         # Eager
         return functools.reduce(function, self.__items, *args)
 
@@ -764,7 +766,7 @@ class Stream(Generic[_T_co], Iterable[_T_co], Sized):
             Stream: A new Stream object containing the elements from the original
             stream for which the predicate function returns False.
 
-        """  # noqa: D205
+        """
         return Stream(itertools.filterfalse(predicate, self.__items))
 
     @overload
@@ -791,7 +793,7 @@ class Stream(Generic[_T_co], Iterable[_T_co], Sized):
         -------
             Stream[tuple[_U, ...]]: A new Stream object that iterates over tuples containing elements from the input iterables.
 
-        """  # noqa: D205, E501
+        """  # noqa: E501
         # Lazy
         return Stream(itertools.zip_longest(self.__items, *iterables))
 

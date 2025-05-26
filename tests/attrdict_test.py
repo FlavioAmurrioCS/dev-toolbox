@@ -109,7 +109,7 @@
 #             kepler_ad.orbital_period.Pluto
 #         # Order preservation
 #         assert list(kepler_ad.items()) == list(kepler_dict.items())
-#         assert list(kepler_ad.orbital_period.items()) == list(kepler_dict["orbital_period"].items())
+#         assert list(kepler_ad.orbital_period.items()) == list(kepler_dict["orbital_period"].items())  # noqa: E501
 #         # Round trip
 #         assert self.dumps(kepler_ad) == json_string
 #     def test_pickle(self) -> None:

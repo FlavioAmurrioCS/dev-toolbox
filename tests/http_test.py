@@ -4,10 +4,10 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-
 if TYPE_CHECKING:
-    from dev_toolbox.http import RequestTemplate
     from _typeshed import Incomplete
+
+    from dev_toolbox.http import RequestTemplate
 
 
 @pytest.fixture

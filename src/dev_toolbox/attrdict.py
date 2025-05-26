@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from typing import Any
 from typing import TYPE_CHECKING
-
+from typing import Any
 
 if TYPE_CHECKING:
     from dev_toolbox._types import JSONValue
@@ -32,7 +31,7 @@ class AttrDict(dict):  # type:ignore[type-arg]
         50
         >>> d.items()  # Call the method
         dict_items([('items', 50)]).
-    """  # noqa: D205
+    """
 
     __slots__ = ()
 

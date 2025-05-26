@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from html.parser import HTMLParser
+from typing import TYPE_CHECKING
 from typing import List
 from typing import Sequence
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from typing_extensions import TypeAlias  # pyright: ignore[reportShadowedImports]
@@ -34,7 +34,7 @@ class TablesParser(HTMLParser):
         elif tag == "tr":
             self._table.append(self._row)
         elif tag == "td":
-            self._row.append(self._cell)  # type: ignore
+            self._row.append(self._cell)  # type: ignore[arg-type]
 
     def handle_data(self, data: str) -> None:
         if self._cell is not None:
