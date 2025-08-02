@@ -2,12 +2,15 @@ from __future__ import annotations
 
 import itertools
 import os
-from typing import Sequence
+from typing import TYPE_CHECKING
 
 from dev_toolbox.cli.html_table import TablesParser
 from dev_toolbox.cli.html_table import get_column_widths
 from dev_toolbox.http import RequestTemplate
 from dev_toolbox.http.great_value import gv_request
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 RUFF_URL = "https://docs.astral.sh/ruff/rules/"
 _FILE_CACHE = "/tmp/ruff_rules.html"  # noqa: S108
@@ -25,9 +28,10 @@ ruff_rules_template = RequestTemplate(
 
 def _get_rules_html() -> str:
     if not os.path.exists(_FILE_CACHE):
-        with ruff_rules_template.request(gv_request).response as response, open(
-            _FILE_CACHE, "wb"
-        ) as f:
+        with (
+            ruff_rules_template.request(gv_request).response as response,
+            open(_FILE_CACHE, "wb") as f,
+        ):
             f.write(response.read())
 
     with open(_FILE_CACHE) as f:

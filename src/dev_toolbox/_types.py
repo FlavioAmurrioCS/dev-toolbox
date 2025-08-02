@@ -1,21 +1,20 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from typing import Dict
-from typing import List
 from typing import NamedTuple
-from typing import Sequence
 from typing import TypeVar
 from typing import Union
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from typing_extensions import TypeAlias
     from typing_extensions import TypeGuard
 
     _T = TypeVar("_T")
 
     JSONValue: TypeAlias = Union[
-        str, int, float, bool, None, List["JSONValue"], Dict[str, "JSONValue"]
+        str, int, float, bool, None, list["JSONValue"], dict[str, "JSONValue"]
     ]
 
 

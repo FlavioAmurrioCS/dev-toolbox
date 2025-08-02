@@ -2,8 +2,11 @@ from __future__ import annotations
 
 import mmap
 import os
-from typing import Generator
+from typing import TYPE_CHECKING
 from typing import NamedTuple
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 _MMAP_PAGE_SIZE = os.sysconf("SC_PAGE_SIZE")
 
@@ -110,9 +113,10 @@ class FileSlice(NamedTuple):
         base_chunk_size = file_size_bytes // splits
         chunks: list[FileSlice] = []
 
-        with open(file_path, "r+b") as file, mmap.mmap(
-            file.fileno(), length=0, access=mmap.ACCESS_READ
-        ) as mmapped_file:
+        with (
+            open(file_path, "r+b") as file,
+            mmap.mmap(file.fileno(), length=0, access=mmap.ACCESS_READ) as mmapped_file,
+        ):
             start_byte = 0
             for _ in range(splits):
                 end_byte = min(start_byte + base_chunk_size, file_size_bytes)

@@ -6,13 +6,13 @@ import os
 import pkgutil
 import re
 from typing import TYPE_CHECKING
-from typing import Generator
-from typing import Iterable
-from typing import Sequence
 
 from dev_toolbox.data_structures.tree import TreeNode
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
+    from collections.abc import Iterable
+    from collections.abc import Sequence
     from types import ModuleType
 
 

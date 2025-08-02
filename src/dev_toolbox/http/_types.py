@@ -3,13 +3,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
     from typing import IO
     from typing import Any
-    from typing import Dict
-    from typing import List
-    from typing import Mapping
     from typing import Optional
-    from typing import Tuple
     from typing import TypeVar
     from typing import Union
 
@@ -22,9 +19,9 @@ if TYPE_CHECKING:
     FileContent = Union[IO[bytes], bytes, str]
     _FileSpec = Union[
         FileContent,
-        Tuple[Optional[str], FileContent],
+        tuple[Optional[str], FileContent],
     ]
-    _Params = Union[Dict[str, Any], Tuple[Tuple[str, Any], ...], List[Tuple[str, Any]], None]
+    _Params = Union[dict[str, Any], tuple[tuple[str, Any], ...], list[tuple[str, Any]], None]
 
     HTTP_METHOD = Literal["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS", "TRACE"]
 

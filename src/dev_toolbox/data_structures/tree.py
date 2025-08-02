@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+from collections.abc import Generator
+from collections.abc import Hashable
+from collections.abc import Sequence
 from dataclasses import dataclass
 from dataclasses import field
-from functools import lru_cache
+from functools import cache
 from typing import TYPE_CHECKING
 from typing import Callable
-from typing import Generator
 from typing import Generic
-from typing import Hashable
-from typing import Sequence
 from typing import TypeVar
 
 if TYPE_CHECKING:
@@ -58,7 +58,7 @@ class TreeNode(Generic[_T]):
             yield from child.nodes()
 
     @classmethod
-    @lru_cache(maxsize=None)
+    @cache
     def children_count(cls, node: Self) -> int:
         """Count children."""
         return sum(1 + cls.children_count(child) for child in node.children)

@@ -3,21 +3,21 @@ from __future__ import annotations
 import functools
 import itertools
 from collections import defaultdict
+from collections.abc import Iterable
 from collections.abc import Sized
 from itertools import islice
 from typing import TYPE_CHECKING
 from typing import Generic
-from typing import Iterable
 from typing import TypeVar
 from typing import overload
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
+    from collections.abc import Hashable
+    from collections.abc import Iterator
     from typing import Any
     from typing import BinaryIO
     from typing import Callable
-    from typing import Generator
-    from typing import Hashable
-    from typing import Iterator
     from typing import TextIO
 
     from _typeshed import SupportsRichComparison

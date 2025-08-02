@@ -9,7 +9,6 @@ from typing import TYPE_CHECKING
 from typing import Any
 from typing import Callable
 from typing import NamedTuple
-from typing import Sequence
 from typing import TypeVar
 
 from dev_toolbox._types import is_list_of
@@ -17,6 +16,7 @@ from dev_toolbox._types import is_namedtuple
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
+    from collections.abc import Sequence
 
     from _typeshed import DataclassInstance
     from typing_extensions import TypeAlias
