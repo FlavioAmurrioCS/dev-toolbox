@@ -92,7 +92,7 @@ def _parse_message(x: Message[str, str]) -> Metadata:
     items = items if isinstance(items, list) else [items]
     for line in items:
         key, value = line.split(",", 1)
-        ret["project_urls"][key.strip()] = value.strip()  # type: ignore[call-overload]
+        ret["project_urls"][key.strip()] = value.strip()
     ret["classifiers"] = ret.pop("classifier", [])
     ret.pop("metadata_version", None)
 
