@@ -22,9 +22,9 @@ def obj_compare(a: T, b: T) -> bool:  # noqa: PLR0911, C901
             return False
 
         for key in a:
-            if key not in b:
+            if key not in b:  # type: ignore[operator]
                 return False
-            if not obj_compare(a[key], b[key]):
+            if not obj_compare(a[key], b[key]):  # type: ignore[index]
                 return False
 
         return True

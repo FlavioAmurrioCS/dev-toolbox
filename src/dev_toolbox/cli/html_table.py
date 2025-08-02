@@ -2,14 +2,14 @@ from __future__ import annotations
 
 from html.parser import HTMLParser
 from typing import TYPE_CHECKING
-from typing import List
-from typing import Sequence
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from typing_extensions import TypeAlias  # pyright: ignore[reportShadowedImports]
 
     Row: TypeAlias = Sequence[str]
-    Table: TypeAlias = List[Row]
+    Table: TypeAlias = list[Row]
 
 
 class TablesParser(HTMLParser):

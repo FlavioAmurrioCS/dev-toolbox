@@ -1,4 +1,3 @@
-# flake8: noqa: S603
 from __future__ import annotations
 
 import argparse
@@ -7,11 +6,11 @@ import subprocess
 from functools import partial
 from typing import TYPE_CHECKING
 from typing import NamedTuple
-from typing import Sequence
 
 from typing_extensions import Self
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
     from types import FrameType
 
 

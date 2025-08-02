@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
 from typing import Callable
-from typing import Generator
-from typing import Iterable
-from typing import Iterator
 from typing import TypeVar
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
+    from collections.abc import Iterable
+    from collections.abc import Iterator
 
 T = TypeVar("T")
 

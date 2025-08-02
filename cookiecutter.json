@@ -1,9 +1,11 @@
 {
   "project_name": "dev-toolbox",
-  "project_slug": "dev_toolbox",
+  "package_name": "dev-toolbox",
+  "module_name": "dev_toolbox",
   "project_short_description": "A collection of useful tools for Python developers.",
-  "minimum_python_version": "3.8",
+  "minimum_python_version": "3.9",
   "full_name": "Flavio Amurrio",
   "email": "25621374+FlavioAmurrioCS@users.noreply.github.com",
-  "github_username": "FlavioAmurrioCS"
+  "github_username": "FlavioAmurrioCS",
+  "project_slug": "dev_toolbox"
 }

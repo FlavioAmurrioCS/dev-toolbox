@@ -8,7 +8,6 @@ import tempfile
 import zipfile
 from email.parser import BytesParser
 from typing import TYPE_CHECKING
-from typing import Mapping
 from typing import NamedTuple
 from typing import TypedDict
 from typing import TypeVar
@@ -16,6 +15,7 @@ from urllib.parse import urljoin
 from urllib.parse import urlparse
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
     from email.message import Message
 
     import httpx
@@ -92,7 +92,7 @@ def _parse_message(x: Message[str, str]) -> Metadata:
     items = items if isinstance(items, list) else [items]
     for line in items:
         key, value = line.split(",", 1)
-        ret["project_urls"][key.strip()] = value.strip()  # type: ignore[call-overload]
+        ret["project_urls"][key.strip()] = value.strip()
     ret["classifiers"] = ret.pop("classifier", [])
     ret.pop("metadata_version", None)
 

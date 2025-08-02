@@ -9,7 +9,7 @@ from typing import overload
 from typing_extensions import TypeVar
 
 if TYPE_CHECKING:
-    from typing import Awaitable
+    from collections.abc import Awaitable
 
     from _typeshed import Incomplete
     from typing_extensions import Literal

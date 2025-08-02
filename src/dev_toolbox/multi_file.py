@@ -7,12 +7,12 @@ from typing import IO
 from typing import TYPE_CHECKING
 from typing import Callable
 from typing import Generic
-from typing import Sequence
 from typing import TypeVar
 
 from typing_extensions import LiteralString
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
     from types import TracebackType
 
     from typing_extensions import Self

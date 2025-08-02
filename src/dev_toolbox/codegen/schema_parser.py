@@ -5,8 +5,8 @@ import re
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
     from typing import Literal
-    from typing import Sequence
     from typing import TypedDict
     from typing import Union
 

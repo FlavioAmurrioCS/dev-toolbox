@@ -8,10 +8,10 @@ from urllib.parse import parse_qs
 from wsgiref.simple_server import make_server
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+    from collections.abc import MutableMapping
     from typing import Callable
-    from typing import Iterable
     from typing import Literal
-    from typing import MutableMapping
     from typing import TypedDict
     from typing import TypeVar
 
