@@ -63,7 +63,7 @@ logger = logging.getLogger(__name__)
 
 
 def _extract_version_from_filename(x: str) -> str:
-    x = x.split("/")[-1]
+    x = x.rsplit("/", maxsplit=1)[-1]
     return x.split(".tar.gz")[0].split("-")[-1] if x.endswith(".tar.gz") else x.split("-")[1]
 
 
